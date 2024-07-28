@@ -5,13 +5,14 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**Enter your name here**/
+//Zia Yandoc
 
 public class ChainReactionMain {
 
     public static void main(String[] args){
 
         ArrayList<ArrayList<String>> wordSets = new ArrayList<>();
-        String filename = "wordList.txt";
+        String filename = ".idea/wordList.txt";
 
         try{
             FileInputStream file = new FileInputStream(filename);
@@ -91,7 +92,55 @@ public class ChainReactionMain {
 
     public static void cleanData(ArrayList<ArrayList<String>> wordSets){
 	/**Add Code here to clean dataset**/
-	    
+
+        while (true) { //process repeats while target numbers of words haven't been reached
+            //adds all words that appear first on each line to an ArrayList
+            ArrayList<String> firstWords = new ArrayList<>();
+            for (ArrayList<String> row : wordSets) {
+                if (!row.isEmpty()) {
+                    String firstWord = row.get(0);
+                    if (!firstWords.contains(firstWord)) {
+                        firstWords.add(firstWord);
+                    }
+                }
+            }
+
+            //removes words that never appear first on a line
+            for (ArrayList<String> row : wordSets) {
+                for (int j = 1; j < row.size(); j++) {
+                    if (!firstWords.contains(row.get(j))) {
+                        row.remove(j);
+                        j--;
+                    }
+                }
+            }
+
+            //removes standalone words
+            for (int i = 0; i < wordSets.size(); i++) {
+                if (wordSets.get(i).size() == 1) {
+                    wordSets.remove(i);
+                    i--;
+                }
+            }
+
+            //counts total number of words and number of unique words
+            int totalWords = 0;
+            ArrayList<String> uniqueWords = new ArrayList<>();
+            for (ArrayList<String> row : wordSets) {
+                for (String word : row) {
+                    totalWords++;
+                    if (!uniqueWords.contains(word)) {
+                        uniqueWords.add(word);
+                    }
+                }
+            }
+
+            //stops checking words when target word counts are reached
+            if (totalWords == 8033 && uniqueWords.size() == 2334) {
+                break;
+            }
+        }
+
         validate(wordSets);
     }
     public static void validate(ArrayList<ArrayList<String>> wordSets){
